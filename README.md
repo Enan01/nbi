@@ -7,3 +7,4 @@ bill support list:
 - [ ] alipay
 - [ ] wechat
 
+> Official notion api link: https://developers.notion.com/reference/intro
