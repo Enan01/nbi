@@ -52,4 +52,8 @@ type (
 			} `json:"link,omitempty"`
 		} `json:"text,omitempty"`
 	}
+
+	NumberP struct {
+		Number float64 `json:"number,omitempty"`
+	}
 )
