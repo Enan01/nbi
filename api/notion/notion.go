@@ -2,129 +2,65 @@
 package notion
 
 import (
+	"context"
+	"errors"
 	"log"
-	"time"
+	"net/http"
 
 	"github.com/go-resty/resty/v2"
+)
+
+var (
+	ErrHttpStatusNotOK = errors.New("http status not 200")
 )
 
 const (
 	NotionApiHost = "https://api.notion.com"
 
-	CreatePageUri = "/pages"
+	CreatePageUri = "/v1/pages"
 
 	DatabaseId = ""
 	Token      = ""
 )
 
-type NotionApiClient struct {
+type Api interface {
+	CreatePage(ctx context.Context, req CreatePageRequest) (resp CreatePageResponse, err error)
+}
+
+type api struct {
 	Resty *resty.Client
 	Host  string
 }
 
-func NewNotionApiClient(host string, token string) NotionApiClient {
+func NewApi(host string, token string) Api {
 	r := resty.New()
 	r.SetAuthToken(token)
-	return NotionApiClient{
+	return &api{
 		Resty: r,
 		Host:  host,
 	}
 }
 
-type (
-	CreatePageRequest struct {
-		Parent struct {
-			DatabaseID string `json:"database_id"`
-		} `json:"parent"`
-		Properties struct {
-			Type struct {
-				Select struct {
-					ID    string `json:"id"`
-					Name  string `json:"name"`
-					Color string `json:"color"`
-				} `json:"select"`
-			} `json:"Type"`
-			Score5 struct {
-				Select struct {
-					ID    string `json:"id"`
-					Name  string `json:"name"`
-					Color string `json:"color"`
-				} `json:"select"`
-			} `json:"Score /5"`
-			Name struct {
-				Title []struct {
-					Text struct {
-						Content string `json:"content"`
-					} `json:"text"`
-				} `json:"title"`
-			} `json:"Name"`
-			Status struct {
-				Select struct {
-					ID    string `json:"id"`
-					Name  string `json:"name"`
-					Color string `json:"color"`
-				} `json:"select"`
-			} `json:"Status"`
-			Publisher struct {
-				Select struct {
-					ID    string `json:"id"`
-					Name  string `json:"name"`
-					Color string `json:"color"`
-				} `json:"select"`
-			} `json:"Publisher"`
-			PublishingReleaseDate struct {
-				Date struct {
-					Start time.Time   `json:"start"`
-					End   interface{} `json:"end"`
-				} `json:"date"`
-			} `json:"Publishing/Release Date"`
-			Link struct {
-				URL string `json:"url"`
-			} `json:"Link"`
-			Summary struct {
-				RichText []struct {
-					Type string `json:"type"`
-					Text struct {
-						Content string      `json:"content"`
-						Link    interface{} `json:"link"`
-					} `json:"text"`
-					Annotations struct {
-						Bold          bool   `json:"bold"`
-						Italic        bool   `json:"italic"`
-						Strikethrough bool   `json:"strikethrough"`
-						Underline     bool   `json:"underline"`
-						Code          bool   `json:"code"`
-						Color         string `json:"color"`
-					} `json:"annotations"`
-					PlainText string      `json:"plain_text"`
-					Href      interface{} `json:"href"`
-				} `json:"rich_text"`
-			} `json:"Summary"`
-			Read struct {
-				Checkbox bool `json:"checkbox"`
-			} `json:"Read"`
-		} `json:"properties"`
-	}
-
-	CreatePageResponse struct {
-	}
-)
-
-func (ac NotionApiClient) CreatePage(req CreatePageRequest) (resp CreatePageResponse, err error) {
+func (ac *api) CreatePage(ctx context.Context, req CreatePageRequest) (resp CreatePageResponse, err error) {
 	url := ac.Host + CreatePageUri
 
 	res, err := ac.Resty.R().
 		SetHeaders(map[string]string{
 			"Content-Type":   "application/json",
-			"Notion-Version": "2021-08-16",
+			"Notion-Version": "2022-06-28",
 		}).
 		SetBody(req).
 		SetResult(&resp).
 		Post(url)
 
-	log.Printf("CreatePage response %s", res)
+	log.Printf("ac.CreatePage response %s", res)
 
 	if err != nil {
+		return
+	}
+
+	if res.StatusCode() != http.StatusOK {
+		err = ErrHttpStatusNotOK
 		return
 	}
 
