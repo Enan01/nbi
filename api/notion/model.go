@@ -14,3 +14,9 @@ type (
 		Id string `json:"id"`
 	}
 )
+
+func (pp PageProperties) Append(propName string, prop Property) {
+	val := make(map[PropertyType]Property)
+	val[prop.GetType()] = prop
+	pp[propName] = val
+}
