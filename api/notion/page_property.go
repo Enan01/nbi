@@ -1,6 +1,24 @@
 package notion
 
 type PropertyType string
+
+func ToPropertyType(t string) PropertyType {
+	switch PropertyType(t) {
+	case PropTypeDate:
+		return PropTypeDate
+	case PropTypeNumber:
+		return PropTypeNumber
+	case PropTypeSelect:
+		return PropTypeSelect
+	case PropTypeTitle:
+		return PropTypeTitle
+	case PropTypeRichText:
+		return PropTypeRichText
+	default:
+		return PropTypeUnknown
+	}
+}
+
 type RichTextType string
 type Color string
 
@@ -9,11 +27,12 @@ type Property interface {
 }
 
 const (
-	PropDate     PropertyType = "date"
-	PropNumber   PropertyType = "number"
-	PropSelect   PropertyType = "select"
-	PropTitle    PropertyType = "title"
-	PropRichText PropertyType = "rich_text"
+	PropTypeUnknown  PropertyType = "unknown"
+	PropTypeDate     PropertyType = "date"
+	PropTypeNumber   PropertyType = "number"
+	PropTypeSelect   PropertyType = "select"
+	PropTypeTitle    PropertyType = "title"
+	PropTypeRichText PropertyType = "rich_text"
 )
 
 const (
@@ -23,8 +42,16 @@ const (
 )
 
 const (
-	// TODO
-	Default Color = "default"
+	ColorDefault Color = "default"
+	ColorGray    Color = "gray"
+	ColorBrown   Color = "brown"
+	ColorRed     Color = "red"
+	ColorOrange  Color = "orange"
+	ColorYellow  Color = "yellow"
+	ColorGreen   Color = "green"
+	ColorBlue    Color = "blue"
+	ColorPurple  Color = "purple"
+	ColorPink    Color = "pink"
 )
 
 type (
@@ -37,16 +64,10 @@ type (
 	SelectP struct {
 		Id    string `json:"id,omitempty"`
 		Name  string `json:"name,omitempty"`
-		Color string `json:"color,omitempty"`
+		Color Color  `json:"color,omitempty"`
 	}
 
-	RichTextP struct {
-		PlainText   string               `json:"plain_text,omitempty"`
-		Herf        string               `json:"herf,omitempty"`
-		Annotations *RichTextAnnotations `json:"annotations,omitempty"`
-		Type        RichTextType         `json:"type,omitempty"`
-		Text        *RichTextText        `json:"text,omitempty"`
-	}
+	RichTextP []RichText
 
 	RichTextAnnotations struct {
 		Bold          bool  `json:"bold,omitempty"`
@@ -55,6 +76,14 @@ type (
 		Underline     bool  `json:"underline,omitempty"`
 		Code          bool  `json:"code,omitempty"`
 		Color         Color `json:"color,omitempty"`
+	}
+
+	RichText struct {
+		PlainText   string               `json:"plain_text,omitempty"`
+		Herf        string               `json:"herf,omitempty"`
+		Annotations *RichTextAnnotations `json:"annotations,omitempty"`
+		Type        RichTextType         `json:"type,omitempty"`
+		Text        *RichTextText        `json:"text,omitempty"`
 	}
 
 	RichTextText struct {
@@ -66,11 +95,9 @@ type (
 		Url string `json:"url,omitempty"`
 	}
 
-	NumberP struct {
-		Number float64 `json:"number,omitempty"`
-	}
+	NumberP float64
 
-	TitleP []RichTextP
+	TitleP []RichText
 )
 
 func (p DateP) GetType() PropertyType {

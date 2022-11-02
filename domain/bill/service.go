@@ -1,0 +1,24 @@
+package bill
+
+import (
+	"context"
+	"log"
+
+	"github.com/Enan01/notion_bill/api/notion"
+)
+
+func SyncToNotion(bill Bill) error {
+	req, err := bill.ToCreatePageRequest()
+	if err != nil {
+		return err
+	}
+
+	napi := notion.NewApi(notion.NotionApiHost, notion.Token)
+	resp, err := napi.CreatePage(context.Background(), req)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("napi.CreatePage response = %+v", resp)
+	return nil
+}

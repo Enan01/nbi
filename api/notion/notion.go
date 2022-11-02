@@ -3,6 +3,7 @@ package notion
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
@@ -16,12 +17,14 @@ var (
 
 const (
 	NotionApiHost = "https://api.notion.com"
-
-	CreatePageUri = "/v1/pages"
-
-	DatabaseId = ""
-	Token      = ""
 )
+
+var (
+	CreatePageUri = "/v1/pages"
+)
+
+var Token = ""
+var DebugMode bool = true
 
 type Api interface {
 	CreatePage(ctx context.Context, req CreatePageRequest) (resp CreatePageResponse, err error)
@@ -42,6 +45,11 @@ func NewApi(host string, token string) Api {
 }
 
 func (ac *api) CreatePage(ctx context.Context, req CreatePageRequest) (resp CreatePageResponse, err error) {
+	if DebugMode {
+		json, _ := json.Marshal(req)
+		log.Printf("CreatePage req = %s", json)
+	}
+
 	url := ac.Host + CreatePageUri
 
 	res, err := ac.Resty.R().

@@ -37,8 +37,8 @@ func Test_api_CreatePage(t *testing.T) {
 					},
 					Properties: map[string]map[PropertyType]Property{
 						"Name": {
-							PropTitle: TitleP{
-								RichTextP{
+							PropTypeTitle: TitleP{
+								RichText{
 									Type: RichTextTypeText,
 									Text: &RichTextText{
 										Content: "notion api test",
@@ -47,7 +47,7 @@ func Test_api_CreatePage(t *testing.T) {
 							},
 						},
 						"Tags": {
-							PropSelect: SelectP{
+							PropTypeSelect: SelectP{
 								Id:    "",
 								Name:  "play",
 								Color: "yellow",
