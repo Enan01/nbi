@@ -78,14 +78,19 @@ const (
 )
 
 const (
-	BillIn  BillInout = 1
-	BillOut BillInout = 2
+	BillInoutUnknown BillInout = 0
+	BillIn           BillInout = 1
+	BillOut          BillInout = 2
 )
 
 const (
 	BillTagPropName = "propertyName"
 	BillTagPropType = "propertyType"
 )
+
+type BillParser interface {
+	Parse() ([]Bill, error)
+}
 
 // 账单类型
 type Bill struct {

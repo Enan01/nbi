@@ -43,3 +43,55 @@ func TestSyncToNotion(t *testing.T) {
 		})
 	}
 }
+
+func TestSyncWechatBillToNotion(t *testing.T) {
+	type args struct {
+		filePath string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"case 1",
+			args{filePath: ""},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		BillDatabaseId = "" // please use your database id
+		notion.Token = ""   // please use your notion token
+		t.Run(tt.name, func(t *testing.T) {
+			if err := SyncWechatBillToNotion(tt.args.filePath); (err != nil) != tt.wantErr {
+				t.Errorf("SyncWechatBillToNotion() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestSyncAlipayBillToNotion(t *testing.T) {
+	type args struct {
+		filePath string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"case 1",
+			args{filePath: ""},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		BillDatabaseId = "" // please use your database id
+		notion.Token = ""   // please use your notion token
+		t.Run(tt.name, func(t *testing.T) {
+			if err := SyncAlipayBillToNotion(tt.args.filePath); (err != nil) != tt.wantErr {
+				t.Errorf("SyncWechatBillToNotion() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

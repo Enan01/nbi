@@ -22,3 +22,39 @@ func SyncToNotion(bill Bill) error {
 	log.Printf("napi.CreatePage response = %+v", resp)
 	return nil
 }
+
+func SyncWechatBillToNotion(filePath string) error {
+	var billParser BillParser
+	billParser = WechatBillParser{BillFilePath: filePath}
+
+	bills, err := billParser.Parse()
+	if err != nil {
+		return err
+	}
+
+	for _, bill := range bills {
+		if err := SyncToNotion(bill); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func SyncAlipayBillToNotion(filePath string) error {
+	var billParser BillParser
+	billParser = AlipayBillParser{BillFilePath: filePath}
+
+	bills, err := billParser.Parse()
+	if err != nil {
+		return err
+	}
+
+	for _, bill := range bills {
+		if err := SyncToNotion(bill); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
