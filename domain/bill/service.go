@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/Enan01/notion_bill/api/notion"
+	"github.com/Enan01/nbi/api/notion"
 )
 
 func SyncToNotion(bill Bill) error {

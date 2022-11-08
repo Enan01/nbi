@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Enan01/notion_bill/common"
+	"github.com/Enan01/nbi/common"
 )
 
 var WechatBillStartLineNo int

@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/Enan01/notion_bill/api/notion"
-	"github.com/Enan01/notion_bill/domain/bill"
+	"github.com/Enan01/nbi/api/notion"
+	"github.com/Enan01/nbi/domain/bill"
 	cli "github.com/urfave/cli/v2"
 )
 

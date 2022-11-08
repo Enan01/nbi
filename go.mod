@@ -1,4 +1,4 @@
-module github.com/Enan01/notion_bill
+module github.com/Enan01/nbi
 
 go 1.15
 
