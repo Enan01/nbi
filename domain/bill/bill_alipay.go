@@ -7,20 +7,25 @@ import (
 	"github.com/Enan01/notion_bill/common"
 )
 
+var AlipayBillStartLineNo int
+
 type AlipayBillParser struct {
 	BillFilePath string
 }
 
 func (p AlipayBillParser) Parse() ([]Bill, error) {
-	startLineNo := 5
-	endLineNo := 84
-	lineCols, err := common.LineColumnsCsvFile(p.BillFilePath, startLineNo, endLineNo)
+	startLineNo := AlipayBillStartLineNo
+	lineCols, err := common.LineColumnsCsvFile(p.BillFilePath, startLineNo, -1)
 	if err != nil {
 		return nil, err
 	}
 
 	var bills = make([]Bill, 0)
 	for _, lineCol := range lineCols {
+		if lineCol[0] == "------------------------------------------------------------------------------------" {
+			break
+		}
+
 		var (
 			dealTime time.Time
 			inout    BillInout

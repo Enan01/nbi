@@ -17,11 +17,14 @@ var BillDatabaseId string
 // 账单来源
 type BillSource string
 
-// 账单类型
+// 账单分类
 type BillCatecory string
 
 // 收支类型
 type BillInout int
+
+// 账单类型
+type BillType int
 
 func (s BillSource) String() string {
 	switch s {
@@ -81,6 +84,11 @@ const (
 	BillInoutUnknown BillInout = 0
 	BillIn           BillInout = 1
 	BillOut          BillInout = 2
+)
+
+const (
+	BillTypeAlipay BillType = 1
+	BillTypeWechat BillType = 2
 )
 
 const (

@@ -31,7 +31,6 @@ func LineColumnsCsvFile(filePath string, startLineNo int, endLineNo int) (lineCo
 // LinesCsvFileFromLineNo return string array contains csv lines, line started from param lineNo.
 // startLineNo start from 0.
 // if endLineNo == -1 means last line.
-
 func LinesCsvFile(filePath string, startLineNo int, endLinNo int) (lines []string, err error) {
 	var file *os.File
 	file, err = os.Open(filePath)

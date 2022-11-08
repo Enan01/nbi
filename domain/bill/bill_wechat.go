@@ -7,12 +7,14 @@ import (
 	"github.com/Enan01/notion_bill/common"
 )
 
+var WechatBillStartLineNo int
+
 type WechatBillParser struct {
 	BillFilePath string
 }
 
 func (p WechatBillParser) Parse() ([]Bill, error) {
-	lineNo := 17
+	lineNo := WechatBillStartLineNo
 	lineCols, err := common.LineColumnsCsvFile(p.BillFilePath, lineNo, -1)
 	if err != nil {
 		return nil, err
